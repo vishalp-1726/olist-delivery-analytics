@@ -10,6 +10,7 @@ measure how often orders arrive after the promised date, what that costs in revi
 whether the delay comes from the seller or the carrier, and which fixes Operations should make first.
 
 **[View the live dashboard on Tableau Public](https://public.tableau.com/app/profile/vishal.parmar7472/viz/LatedeliveriesatOlist/1Overview)**
+· [Report (PDF)](reports/deck.pdf)
 · [Metric definitions](docs/metric_definitions.md)
 · [Notebooks](notebooks/)
 · [SQL](sql/)
@@ -109,7 +110,8 @@ four states from 13.82% to 11.16%, +5 days to 9.74%.
 
 The current seller watchlist (89 sellers with 30+ orders and 20%+ late handovers, 15% of all late orders), the
 promise-day options and the impact table go to Operations as an Excel hand-off. The watchlist has seller IDs,
-so it stays out of this repository and out of Tableau Public.
+so it stays out of this repository and out of Tableau Public. The full story for the Head of Operations, with
+next steps for the first 90 days, is in the [report deck](reports/deck.pdf).
 
 ## Dashboard
 
@@ -196,7 +198,9 @@ olist-delivery-analytics/
 │   ├── export.py                 # CSVs for Tableau, Excel hand-off for Operations
 │   └── config.py, db.py, style.py
 ├── notebooks/                    # 01 data quality, 02-05 one per business question
-├── reports/figures/              # charts used in this README
+├── reports/
+│   ├── deck.pdf                  # final report: findings, recommendations and next steps, 15 slides
+│   └── figures/                  # charts used in this README
 ├── dashboards/                   # Tableau workbook and tab screenshots
 └── docs/metric_definitions.md
 ```
