@@ -1,0 +1,23 @@
+# Project settings. All business inputs are kept here, not inside the code.
+project:
+  company: "Olist"
+  currency: "R$"
+
+analysis:
+  first_month: "2017-01"          # months before this have too few orders to compare
+  last_month: "2018-08"           # later orders were still on the way when the data was taken
+
+repeat:
+  window_days: 180                # did the customer buy again within 180 days of the first order?
+  last_first_order: "2018-03"     # later first orders don't have 180 days of follow-up in the data
+
+sellers:
+  min_orders: 30                  # a seller needs at least this many delivered orders to be judged
+  watchlist_late_handover: 0.20   # on the watchlist if 20%+ of their orders were handed over late
+
+promise:
+  build_year: "2017"              # choose the problem states on 2017 orders...
+  test_year: "2018"               # ...and check the extra days on 2018 orders
+  problem_state_min_orders: 500
+  problem_state_late_rate: 0.08   # a "problem state" was late on more than 8% of its 2017 orders
+  buffer_days: [2, 3, 5, 7]       # extra promise days tested for the problem states
