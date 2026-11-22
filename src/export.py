@@ -1,5 +1,5 @@
 """Exports the results in the format each team uses:
-  - CSV copies of the report tables for the Tableau Public dashboard (totals only, no customer or seller IDs)
+  - CSV files for the Tableau Public dashboard (no customer, seller or order IDs)
   - one Excel file for Operations: the seller watchlist, the promise-day options and the impact table
 
 Usage (after notebooks 01-05):  uv run python -m src.export
@@ -9,11 +9,12 @@ import pandas as pd
 from src.config import PROCESSED
 from src.db import query
 
-# the tables the dashboard uses: totals per month, band, state, route or action
+# the tables the dashboard uses:
+#   report_orders = one row per delivered order; tabs Overview and Causes work out every number from it, so the filters apply
+#   the rest = results of the 2018 tests (Actions tab); they are fixed, the filters don't change them
 TABLES = [
-    "report_monthly", "report_late_bands", "report_review_summary", "report_repeat", "report_repeat_value",
-    "report_handover", "report_time_split", "report_states", "report_routes", "report_spikes",
-    "report_promise_buffer", "report_impact",
+    "report_orders",
+    "report_repeat", "report_repeat_value", "report_promise_buffer", "report_impact",
 ]
 
 

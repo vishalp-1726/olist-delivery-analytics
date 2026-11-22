@@ -9,13 +9,13 @@ An end-to-end delivery analytics project on **real data** from **Olist**, a Braz
 measure how often orders arrive after the promised date, what that costs in reviews and repeat buying,
 whether the delay comes from the seller or the carrier, and which fixes Operations should make first.
 
-**[View the live dashboard on Tableau Public](https://public.tableau.com/app/profile/vishal.parmar7472/viz/LatedeliveriesatOlist/1Overview)**
+**[View the live dashboard on Tableau Public](https://public.tableau.com/app/profile/vishal.parmar7472/viz/LatedeliveriesatOlist/Overview)**
 · [Report (PDF)](reports/deck.pdf)
 · [Metric definitions](docs/metric_definitions.md)
 · [Notebooks](notebooks/)
 · [SQL](sql/)
 
-[![Dashboard tab 1: Overview](dashboards/tab1_overview.png)](https://public.tableau.com/app/profile/vishal.parmar7472/viz/LatedeliveriesatOlist/1Overview)
+[![Dashboard tab 1: Overview](dashboards/tab1_overview.png)](https://public.tableau.com/app/profile/vishal.parmar7472/viz/LatedeliveriesatOlist/Overview)
 
 ## Contents
 
@@ -115,13 +115,20 @@ next steps for the first 90 days, is in the [report deck](reports/deck.pdf).
 
 ## Dashboard
 
-Three tabs on Tableau Public. Buttons at the top move between the tabs.
+Three tabs on Tableau Public. Buttons at the top move between the tabs, the filters sit in a panel on the left,
+and each tab starts with a row of KPI cards (value, change badge, comparison). Every number on Overview and Causes
+is worked out from one row per delivered order (`report_orders`), so the filters change every card and chart. The
+state and category lists hold the members with 1,000+ orders and group the rest ("Other 15 states"), and a line at the
+top of the panel shows how many orders the filters keep; if no order matches, it says so and the tab shows all orders.
+On Actions the left column is the what-if (it moves with the panel) and the right column and the bottom row are the
+tested fixes on Jan-Aug 2018, which stay fixed; the promise-day row for the extra days chosen in the panel is
+highlighted, and +3 days is marked as the plan.
 
-| Tab | For | What it shows |
-|---|---|---|
-| [1 Overview](https://public.tableau.com/app/profile/vishal.parmar7472/viz/LatedeliveriesatOlist/1Overview) | Head of Operations | KPI tiles, late rate and delivered orders by month, 1-2 star reviews by days late, promised vs actual delivery days, review score by month. Filter: purchase month from / to |
-| [2 Causes](https://public.tableau.com/app/profile/vishal.parmar7472/viz/LatedeliveriesatOlist/2Causes) | Logistics, Seller Ops | Days with the seller vs with the carrier, late rate by state with 95% CIs, routes with the most late orders, the spike months. Filters: minimum orders per state, route type |
-| [3 Actions](https://public.tableau.com/app/profile/vishal.parmar7472/viz/LatedeliveriesatOlist/3Actions) | Operations | Late orders avoided by each action, the promise trade-off and its options table, repeat buying after a late first order. Parameter: extra promise days |
+| Tab | For | What it shows | Filters |
+|---|---|---|---|
+| [Overview](https://public.tableau.com/app/profile/vishal.parmar7472/viz/LatedeliveriesatOlist/Overview) | Head of Operations | Late rate, worst month, spike months, bad reviews and stars when late; late rate and delivered orders by month, 1-2 star reviews by days late, promised vs actual days, review score by month | Purchase month from / to, customer state, seller state, product category |
+| [Causes](https://public.tableau.com/app/profile/vishal.parmar7472/viz/LatedeliveriesatOlist/Causes) | Logistics, Seller Ops | Days with the seller vs with the carrier, the spike months, late rate by state with 95% CIs, routes with the most late orders | The same five; the states chart shows the 12 states with most orders in the selection |
+| [Actions](https://public.tableau.com/app/profile/vishal.parmar7472/viz/LatedeliveriesatOlist/Actions) | Operations | What-if: late orders and bad reviews avoided by extra promise days, month by month; the tested results (impact of each fix, promise-day options, repeat buying) are fixed | Extra promise days (0, 2, 3, 5 or 7), which states get them, test months |
 
 | Causes | Actions |
 |---|---|
@@ -191,11 +198,11 @@ olist-delivery-analytics/
 │   ├── 01_create_tables.sql      # one table per file, plus load and data-quality logs
 │   ├── 02_clean.sql              # the data fixes
 │   ├── 03_views.sql              # one row per delivered order: late flag, handover and carrier days, route
-│   └── 04_reports.sql            # monthly KPIs, days-late bands, states and routes with 95% CIs
+│   └── 04_reports.sql            # monthly KPIs, days-late bands, states and routes with 95% CIs, order rows for Tableau
 ├── src/
 │   ├── load_data.py              # load data/raw into PostgreSQL, then run the SQL files
 │   ├── dq_checks.py              # data-quality checks
-│   ├── export.py                 # CSVs for Tableau, Excel hand-off for Operations
+│   ├── export.py                 # CSVs for Tableau (order rows + test results), Excel hand-off for Operations
 │   └── config.py, db.py, style.py
 ├── notebooks/                    # 01 data quality, 02-05 one per business question
 ├── reports/

@@ -1,5 +1,5 @@
 -- 04_reports.sql
--- Small summary tables for the charts and the Tableau dashboard (totals only, no customer IDs).
+-- Summary tables for the charts, plus one row per delivered order for the Tableau dashboard (no customer, seller or order IDs).
 -- Each table is dropped and built again, so it always matches the data.
 -- All tables use the analysis window Jan-2017 to Aug-2018 (the same months as in settings.yaml).
 
@@ -87,3 +87,33 @@ from v_delivered
 where seller_late is not null and purchase_month between '2017-01' and '2018-08'
 group by 1
 order by 1;
+
+-- 6. One row per delivered order, for the dashboard filters (month, customer state, seller state, category).
+--    Tableau works out every rate from these rows, so a filter changes every tile and chart the same way.
+--    No order, customer or seller IDs. Category = the product of item 1 (same item the seller comes from).
+drop table if exists report_orders;
+create table report_orders as
+select d.purchase_month,
+       d.customer_state,
+       d.seller_state,
+       d.same_state,
+       ct.product_category_name_english                as category,
+       d.is_late,
+       d.days_late,
+       case when d.days_late <= 0  then '0 on time or early'
+            when d.days_late <= 3  then '1 1-3 days late'
+            when d.days_late <= 7  then '2 4-7 days late'
+            when d.days_late <= 14 then '3 8-14 days late'
+            else '4 15+ days late' end                 as late_band,
+       d.seller_late,
+       d.days_to_handover,
+       d.days_with_carrier,
+       d.delivery_days,
+       d.promised_days,
+       d.review_score
+from v_delivered d
+join order_items i on i.order_id = d.order_id and i.order_item_id = 1
+join products p on p.product_id = i.product_id
+join category_translation ct on ct.product_category_name = p.product_category_name
+where d.purchase_month between '2017-01' and '2018-08'
+order by d.purchase_month, d.customer_state;

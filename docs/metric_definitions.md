@@ -35,3 +35,12 @@ the logic lives. Analysis window: orders purchased Jan-2017 to Aug-2018 (`config
 | Problem state | 500+ orders in 2017 and late on more than 8% of them (chosen on 2017, checked on 2018) | notebook 05 |
 | Late orders avoided | 2018 late orders under today's rules − 2018 late orders under the change | `report_promise_buffer`, `report_impact` |
 | Bad reviews avoided | Late orders avoided × (bad-review share late − on time). An assumption: an avoided late order gets the on-time review rate | `report_impact` |
+
+## Dashboard
+
+The Tableau dashboard works out the same metrics from `report_orders` (one row per delivered order, no IDs), so the
+filters change every number on Overview and Causes. With no filter set, every number matches the report tables
+above. On Actions, "Extra promise days" is a what-if on the same rows: an order counts as late only if it was
+delivered more than the extra days after its original promised date (the same rule as `report_promise_buffer`).
+The state and category filters list the members with 1,000+ orders; the smaller ones are grouped ("Other 15 states",
+"Other 53 categories"). If no order matches the filters, the dashboard says so and shows all orders.
